@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include 'navbar.html' %}
+    
+
+    <div class="wrapper">
+        <div class="sidebar">
+            
+            <h4>Parametry:</h4> 
+            <form method="post" action="/">
+            <button class="submit-btn-2" name="drop-value" type="submit" method="GET" action="" value="drop-value">Załaduj</button>
+              
+            <ul>
+                <li>
+                    
+                    <h6>Field: </h6>
+                    <input type="range" min="1" max="3" step="1" value="{{field | safe}}" class="slider" id="myfield" name="slider_field" oninput="this.nextElementSibling.value = this.value">
+                    <output class="output_range" id="nfield"></output>
+                    <h6 id="outfield"></h6>
+                </li>
+                <li>
+                    <h6>Od kiedy pomiary: </h6>
+                    <input type="datetime-local" value="{{start | safe}}"  class="slider" id="myRange" name="slider_start" oninput="this.nextElementSibling.value = this.value">
+                    <output class="output_range">{{start | safe}}</output>
+                </li>
+                <li>
+                    <h6>Do kiedy pomiary: </h6>
+                    <input type="datetime-local" value="{{end | safe}}" class="slider" id="myRange" name="slider_end" oninput="this.nextElementSibling.value = this.value">
+                    <output class="output_range">{{end | safe}}</output>
+                </li>
+
+            </ul>
+            <h4>Wiatrak:</h4> 
+            <ul>
+            <li>
+            <h6>Stan wiatraka: <output class="output_range">{{wiatrak | safe}}</output></h6>
+        </li>
+        </ul>
+        </form>
+            <form method="post" action="/send">
+                <button class="submit-btn" name="send-value" type="submit" value="{{wiatrak | safe}}" method="post" action="" id="wiatrak">Włącz wiatrak</button>
+            </form>
+            
+            
+            <form method="post" action="/">
+            <h4>Wyniki:</h4> 
+            <ul>
+                <li>
+                    <h6>Średnia: <output class="output_range">{{srednia | safe}}</output></h6>
+                </li>
+                <li>
+                    <h6>Min: <output class="output_range">{{min | safe}}</output> </h6>
+                </li>
+                <li>
+                    <h6>Max: <output class="output_range">{{max | safe}}</output></h6>
+                </li>
+                <li>
+                    <h6>Amplituda: <output class="output_range">{{amp | safe}}</output></h6>
+                </li>
+            </ul>
+        </form>        
+        </div>
+        <div class="section">
+            <div class="top_navbar">
+                <div class="hamburger">
+                    <a href="#">
+                        <button class="side-panel-toggle" type="button">
+                            <span class="material-icons sp-icon-open">keyboard_double_arrow_left</span>
+                            <span class="material-icons sp-icon-close">keyboard_double_arrow_right</span>
+                          </button> 
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="row mt-1">
+            <div class="col-3"></div>
+            <div class="col-2">
+                {{ div_data_plot | safe }}
+            </div>
+ 
+
+        
+    </div>
+    <script>
+        var title =document.getElementById('myfield');
+        var number = document.getElementById("nfield");
+        var text = document.getElementById("outfield");
+        title.oninput = function() {
+            if(this.value==1){
+                number.innerHTML=1;
+                text.innerHTML="Temperatura[°C]";}
+            else if (this.value==2){
+                number.innerHTML=2;
+                text.innerHTML="Ruch";}
+            else if (this.value==3){
+                number.innerHTML=3;
+                text.innerHTML="Stan wiatraka";}
+            else if (this.value==4){
+                number.innerHTML=4;
+                text.innerHTML="Ciśnienie atm. (BMP-180) [hPa]";}
+            else if (this.value==5){
+                number.innerHTML=5;
+                text.innerHTML="Temp. grzejnika (DS18B20) [°C]";}
+            else if (this.value==6){
+                number.innerHTML=6;
+                text.innerHTML="Temperatura (DS18B20) [°C]";}
+            else if (this.value==7){
+                number.innerHTML=7;
+                text.innerHTML="Ruch (PIR)"; }         
+            else{
+                number.innerHTML=8;
+                text.innerHTML="Temperatura (BMP-180) [°C]";}  
+}
+var btn = document.getElementById("wiatrak");
+if(btn.form.submit) {
+    //btn.form.submit();
+    btn.disabled = true; 
+    setTimeout(() =>
+       {btn.disabled = false;if(btn.value==1){btn.innerHTML="Wyłącz wiatrak";} else btn.innerHTML="Włącz wiatrak";}
+    , 15000 );
+};
+//if(wiatrak==1){btn.innerHTML="Wyłącz Wiatrak";} else btn.innerHTML="Włącz Wiatrak";
+//function change() // no ';' here
+//{
+    //var elem = document.getElementById("myButton1");
+    //var wiatr = document.getElementById("mywiatrak");
+    //var mf = document.getElementById("myfield");
+    //if (elem.value=="Close Curtain") {mf.innerHTML = 1; elem.value="Open Curtain";}
+    //else {wiatr.innerHTML = 0;elem.value="Close Curtain";}
+//}
+    </script>
+   
+{{ script_data_plot | safe }}
+    
+{% endblock %}
